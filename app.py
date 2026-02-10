@@ -67,7 +67,9 @@ def gerar_pdf(df, sucs, aashto, mct_res, ll, ip):
         pdf.cell(60, 10, f"{row['% Passante Acumulada']:.2f}", border=1)
         pdf.ln()
     
-    return pdf.output() # fpdf2 já retorna bytes por padrão
+    # O segredo está aqui: converter bytearray para bytes
+    return bytes(pdf.output())
+
 
 # --- INTERFACE STREAMLIT ---
 st.title("📊 Analisador de Granulometria NBR 7181 & MCT")
@@ -131,12 +133,12 @@ with col2:
         m2.info(f"**AASHTO:** {aashto}")
         m3.warning(f"**MCT:** {mct_res}")
         
-        # Gerar e baixar PDF
+        #Gerar e baixar PDF
         try:
-            pdf_out = gerar_pdf(df_input, sucs, aashto, mct_res, ll, ip)
+            pdf_bytes = gerar_pdf(df_input, sucs, aashto, mct_res, ll, ip)
             st.download_button(
                 label="📥 Baixar Relatório Completo (PDF)",
-                data=pdf_out,
+                data=pdf_bytes,
                 file_name="relatorio_geotecnico.pdf",
                 mime="application/pdf"
             )
