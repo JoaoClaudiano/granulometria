@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Geotécnico - Granulometria</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Análise Granulométrica e Classificação</h1>
+        
+        <section class="card">
+            <h3>Dados de Atterberg</h3>
+            <div class="input-group">
+                <input type="number" id="ll" placeholder="LL (%)">
+                <input type="number" id="lp" placeholder="LP (%)">
+            </div>
+        </section>
+
+        <section class="card">
+            <h3>Ensaios de Peneiramento</h3>
+            <table id="tabela-peneiras">
+                <thead>
+                    <tr>
+                        <th>Peneira (mm)</th>
+                        <th>Peso Retido (g)</th>
+                        <th>Ação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="number" class="abertura" value="4.75"></td>
+                        <td><input type="number" class="peso"></td>
+                        <td><button onclick="removerLinha(this)">×</button></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn-sec" onclick="adicionarLinha()">+ Adicionar Peneira</button>
+        </section>
+
+        <button class="btn-main" onclick="processarDados()">Calcular e Gerar Relatório</button>
+
+        <div id="resultados" class="card" style="display:none;">
+            <h3>Resultados:</h3>
+            <p><strong>SUCS:</strong> <span id="res-sucs"></span></p>
+            <p><strong>AASHTO:</strong> <span id="res-aashto"></span></p>
+            <p><strong>MCT:</strong> <span id="res-mct"></span></p>
+        </div>
+    </div>
+    <script src="/static/js/script.js"></script>
+</body>
+</html>
