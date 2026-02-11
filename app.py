@@ -113,9 +113,9 @@ with col2:
         # Extração para classificação
         def get_p(m): return df_edit[df_edit['Abertura (mm)'] <= m]['% Passante'].iloc[0] if any(df_edit['Abertura (mm)'] <= m) else 0
         
-        p200, p4.75 = get_p(0.075), get_p(4.75)
-        pedregulho = 100 - p4.75
-        areia = p4.75 - p200
+        p200, p4_75 = get_p(0.075), get_p(4.75)
+        pedregulho = 100 - p4_75
+        areia = p4_75 - p200
 
         # Resultados
         st.subheader("🏁 Resultados Normativos")
