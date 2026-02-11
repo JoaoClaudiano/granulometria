@@ -159,7 +159,7 @@ def classificar_aashto_final(p10, p40, p200, ll, ip):
 # =====================================================================
 class PDFReport(FPDF):
     def header(self):
-        self.set_font('Arial', 'B', 15)
+        self.set_font('helvetica', 'B', 15)
         self.cell(0, 10, 'RELATÓRIO GEOTÉCNICO', 0, 1, 'C')
         self.ln(5)
 
@@ -168,32 +168,32 @@ def gerar_pdf(d):
     pdf.add_page()
     
     # RESULTADOS
-    pdf.set_font("Arial", 'B', 12)
+    pdf.set_font("helvetica", 'B', 12)
     pdf.cell(0, 10, "1. CLASSIFICAÇÃO", ln=True)
-    pdf.set_font("Arial", size=11)
+    pdf.set_font("helvetica", size=11)
     pdf.cell(0, 8, f"SUCS: {d['sucs']}", ln=True)
-    pdf.set_font("Arial", '', 10)
+    pdf.set_font("helvetica", '', 10)
     pdf.multi_cell(0, 6, f"- {d['sucs_desc']}", ln=True)
     pdf.ln(2)
     
-    pdf.set_font("Arial", 'B', 11)
+    pdf.set_font("helvetica", 'B', 11)
     pdf.cell(0, 8, f"AASHTO: {d['aashto']}", ln=True)
-    pdf.set_font("Arial", '', 10)
+    pdf.set_font("helvetica", '', 10)
     pdf.multi_cell(0, 6, f"- {d['aashto_desc']}", ln=True)
     pdf.ln(2)
     
-    pdf.set_font("Arial", 'B', 11)
+    pdf.set_font("helvetica", 'B', 11)
     pdf.cell(0, 8, f"MCT: {d['mct']}", ln=True)
-    pdf.set_font("Arial", '', 10)
+    pdf.set_font("helvetica", '', 10)
     # --- TEXTO ATUALIZADO PARA O MCT AUTOMÁTICO ---
-    pdf.multi_cell(0, 6, f"→ Classificação MCT calculada a partir dos coeficientes Mini-MCV (c'={d['c_lin']:.2f}, d'={d['d_lin']:.2f}, perda={d['perda']:.1f}%).", ln=True)
+    pdf.multi_cell(0, 6, f"-> Classificação MCT calculada a partir dos coeficientes Mini-MCV (c'={d['c_lin']:.2f}, d'={d['d_lin']:.2f}, perda={d['perda']:.1f}%).", ln=True)
     # -----------------------------------------------
     
     # PARÂMETROS FÍSICOS
     pdf.ln(5)
-    pdf.set_font("Arial", 'B', 12)
+    pdf.set_font("helvetica", 'B', 12)
     pdf.cell(0, 10, "2. PARÂMETROS FÍSICOS", ln=True)
-    pdf.set_font("Arial", size=11)
+    pdf.set_font("helvetica", size=11)
     pdf.cell(50, 8, f"Massa Seca: {d['massa']} g")
     pdf.cell(50, 8, f"LL: {d['ll']}%")
     pdf.cell(50, 8, f"LP: {d['lp']}%")
@@ -248,7 +248,7 @@ with col_in:
     
     def classificar_mct(c, d, perda):
         if c <= 0 or d <= 0:
-            return "⏸️ Aguardando dados (c' e d' > 0)"
+            return "|| Aguardando dados (c' e d' > 0)"
         
         if d > 20:  # Laterítico
             grupo = "LG'" if c >= 1.5 else "LA'"
@@ -256,7 +256,7 @@ with col_in:
             grupo = "NG'" if c >= 0.6 else "NS'"
         
         if perda > 2.0:
-            return f"{grupo} ⚠️ Perda {perda:.1f}%"
+            return f"{grupo} ! Perda {perda:.1f}%"
         else:
             return grupo
     
@@ -319,7 +319,7 @@ with col_out:
             
             if missing_sieves:
                 st.warning(
-                    f"⚠️ **Atenção: Extrapolação Detectada!**\n\n"
+                    f" **Atenção: Extrapolação Detectada!**\n\n"
                     f"A sua curva granulométrica não abrange as peneiras: {', '.join(missing_sieves)}.\n"
                     "O sistema assumirá 0% ou 100% para estes valores, o que pode distorcer a classificação. "
                     "Sugestão: Adicione peneiras para cobrir toda a faixa."
