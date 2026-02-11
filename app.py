@@ -241,7 +241,6 @@ with col_out:
             st.download_button(
                 "📥 Baixar PDF",
                 data=gerar_pdf(dados_pdf),
-                pdf.cell(0, 8, f"Nota IG: O solo apresenta Índice de Grupo {int(round(ig))}, indicando um comportamento...", ln=True)
                 file_name="relatorio.pdf",
                 mime="application/pdf"
             )
