@@ -230,12 +230,21 @@ with col_in:
     st.info(f"Índice de Plasticidade (IP): {ip:.1f}%")
     
     # MCT - entrada manual (com orientação)
-    st.markdown("**Classificação MCT**")
-    mct_man = st.text_input(
-        "Insira a classe (Manual)", 
-        value="LG'",
-        help="Informe o resultado obtido via ensaios Mini-MCV e Perda de Massa por Imersão."
-    )
+    st.markdown("**Classificação MCT (ensaios Mini-MCV)**")
+    st.caption("Preencha os parâmetros obtidos em laboratório para cálculo automático.")
+    
+    c_lin = st.number_input("Coeficiente c' (coesão aparente)", value=0.0, step=0.1, format="%.2f")
+    d_lin = st.number_input("Coeficiente d' (sensibilidade à água)", value=0.0, step=0.1, format="%.2f")
+    perda = st.number_input("Perda por Imersão (%)", value=0.0, step=0.1, format="%.1f")
+    
+    # Função de classificação MCT baseada no ábaco (implementação resumida)
+    def classificar_mct(c, d, perda):
+        if d > 20:  # Laterítico
+            return "LG'" if c >= 1.5 else "LA'"
+        else:       # Não-laterítico
+            return "NG'" if c >= 0.6 else "NS'"
+    
+    mct_resultado = classificar_mct(c_lin, d_lin, perda)
     st.caption("ℹ️ Este campo não é calculado automaticamente. Insira o dado de laboratório.")
     
     # --- TABELA DE PENEIRAS (MELHORADA) ---
