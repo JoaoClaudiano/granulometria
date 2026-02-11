@@ -173,13 +173,13 @@ def gerar_pdf(d):
     pdf.set_font("Arial", size=11)
     pdf.cell(0, 8, f"SUCS: {d['sucs']}", ln=True)
     pdf.set_font("Arial", '', 10)
-    pdf.multi_cell(0, 6, f"→ {d['sucs_desc']}", ln=True)
+    pdf.multi_cell(0, 6, f"- {d['sucs_desc']}", ln=True)
     pdf.ln(2)
     
     pdf.set_font("Arial", 'B', 11)
     pdf.cell(0, 8, f"AASHTO: {d['aashto']}", ln=True)
     pdf.set_font("Arial", '', 10)
-    pdf.multi_cell(0, 6, f"→ {d['aashto_desc']}", ln=True)
+    pdf.multi_cell(0, 6, f"- {d['aashto_desc']}", ln=True)
     pdf.ln(2)
     
     pdf.set_font("Arial", 'B', 11)
