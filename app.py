@@ -120,7 +120,7 @@ def classificar_aashto_final(p10, p40, p200, ll, ip):
     
     return f"{grupo} ({int(round(ig))})", t1, t2
 
-# --- 4. GERADOR DE PDF ---
+# --- 4. GERADOR DE PDF - CORRIGIDO (USANDO BUFFER DE BYTES) ---
 class PDFReport(FPDF):
     def header(self):
         self.set_font('Arial', 'B', 15)
@@ -136,7 +136,12 @@ def gerar_pdf(d):
     pdf.cell(0, 8, f"SUCS: {d['sucs']}", ln=True)
     pdf.cell(0, 8, f"AASHTO: {d['aashto']}", ln=True)
     pdf.cell(0, 8, f"MCT: {d['mct']}", ln=True)
-    return pdf.output(dest='S').encode('latin-1')
+    
+    # --- CORREÇÃO: USAR BUFFER DE BYTES EM VEZ DE STRING + ENCODE ---
+    buffer = io.BytesIO()
+    pdf.output(buffer)
+    return buffer.getvalue()
+    # ----------------------------------------------------------------
 
 # --- INTERFACE ---
 st.title("🔬 Geotecnia Pro - DashBoard Normativo")
