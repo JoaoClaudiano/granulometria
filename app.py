@@ -229,23 +229,37 @@ with col_in:
     ip = ll - lp
     st.info(f"Índice de Plasticidade (IP): {ip:.1f}%")
     
-    # MCT - entrada manual (com orientação)
+    # --- CLASSIFICAÇÃO MCT (ENSAIOS MINI-MCV) ---
     st.markdown("**Classificação MCT (ensaios Mini-MCV)**")
     st.caption("Preencha os parâmetros obtidos em laboratório para cálculo automático.")
     
-    c_lin = st.number_input("Coeficiente c' (coesão aparente)", value=0.0, step=0.1, format="%.2f")
-    d_lin = st.number_input("Coeficiente d' (sensibilidade à água)", value=0.0, step=0.1, format="%.2f")
-    perda = st.number_input("Perda por Imersão (%)", value=0.0, step=0.1, format="%.1f")
+    col_c, col_d, col_p = st.columns(3)
+    with col_c:
+        c_lin = st.number_input("Coeficiente c'", value=0.0, step=0.1, format="%.2f",
+                                help="Coeficiente linear da curva de deformabilidade Mini-MCV")
+    with col_d:
+        d_lin = st.number_input("Coeficiente d'", value=0.0, step=0.1, format="%.2f",
+                                help="Coeficiente angular (inclinação) da curva Mini-MCV")
+    with col_p:
+        perda_massa = st.number_input("Perda por Imersão (%)", value=0.0, step=0.1, format="%.1f",
+                                      help="Ensaio de perda de massa por imersão (NBR 13602)")
     
-    # Função de classificação MCT baseada no ábaco (implementação resumida)
     def classificar_mct(c, d, perda):
+        if c <= 0 or d <= 0:
+            return "⏸️ Aguardando dados (c' e d' > 0)"
+        
         if d > 20:  # Laterítico
-            return "LG'" if c >= 1.5 else "LA'"
+            grupo = "LG'" if c >= 1.5 else "LA'"
         else:       # Não-laterítico
-            return "NG'" if c >= 0.6 else "NS'"
+            grupo = "NG'" if c >= 0.6 else "NS'"
+        
+        if perda > 2.0:
+            return f"{grupo} ⚠️ Perda {perda:.1f}%"
+        else:
+            return grupo
     
-    mct_resultado = classificar_mct(c_lin, d_lin, perda)
-    st.caption("ℹ️ Este campo não é calculado automaticamente. Insira o dado de laboratório.")
+    mct_resultado = classificar_mct(c_lin, d_lin, perda_massa)
+    st.caption("ℹ️ Este campo deve ser preencihido com os dados do laboratório.")
     
     # --- TABELA DE PENEIRAS (MELHORADA) ---
     st.subheader("📊 Análise Granulométrica")
