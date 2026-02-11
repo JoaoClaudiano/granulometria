@@ -10,7 +10,7 @@ import io
 st.set_page_config(page_title="Geotecnia Pro - Normativo v3.5", layout="wide")
 
 # =====================================================================
-#  DICIONÁRIOS DE INTERPRETAÇÃO TÉCNICA (ACRESCENTADOS)
+#  DICIONÁRIOS DE INTERPRETAÇÃO TÉCNICA
 # =====================================================================
 INTERP_SUCS = {
     "GW": "Pedregulho bem graduado: Excelente para base de pavimentos e fundações.",
@@ -185,7 +185,9 @@ def gerar_pdf(d):
     pdf.set_font("Arial", 'B', 11)
     pdf.cell(0, 8, f"MCT: {d['mct']}", ln=True)
     pdf.set_font("Arial", '', 10)
-    pdf.multi_cell(0, 6, "→ Classificação para solos tropicais. Valor inserido manualmente.", ln=True)
+    # --- TEXTO ATUALIZADO PARA O MCT AUTOMÁTICO ---
+    pdf.multi_cell(0, 6, f"→ Classificação MCT calculada a partir dos coeficientes Mini-MCV (c'={d['c_lin']:.2f}, d'={d['d_lin']:.2f}, perda={d['perda']:.1f}%).", ln=True)
+    # -----------------------------------------------
     
     # PARÂMETROS FÍSICOS
     pdf.ln(5)
@@ -259,7 +261,7 @@ with col_in:
             return grupo
     
     mct_resultado = classificar_mct(c_lin, d_lin, perda_massa)
-    st.caption("ℹ️ Este campo deve ser preencihido com os dados do laboratório.")
+    st.caption(f"ℹ️ Resultado MCT: **{mct_resultado}**")
     
     # --- TABELA DE PENEIRAS (MELHORADA) ---
     st.subheader("📊 Análise Granulométrica")
@@ -396,8 +398,9 @@ with col_out:
                 st.metric("AASHTO", aashto)
                 st.caption(aashto_desc)
             with c3:
-                st.metric("MCT", mct_man)
-                st.caption("Classificação tropical – inserida manualmente.")
+                # --- CORREÇÃO 1: USAR mct_resultado EM VEZ DE mct_man ---
+                st.metric("MCT", mct_resultado)
+                st.caption("Classificação tropical calculada a partir de c' e d'.")
             
             # --- BOTÃO PDF (COM DESCRIÇÕES) ---
             dados_pdf = {
@@ -405,7 +408,11 @@ with col_out:
                 'sucs_desc': sucs_desc,
                 'aashto': aashto,
                 'aashto_desc': aashto_desc,
-                'mct': mct_man,
+                # --- CORREÇÃO 2: USAR mct_resultado E INCLUIR c_lin, d_lin, perda_massa ---
+                'mct': mct_resultado,
+                'c_lin': c_lin,
+                'd_lin': d_lin,
+                'perda': perda_massa,
                 'massa': m_seca,
                 'll': ll,
                 'lp': lp,
